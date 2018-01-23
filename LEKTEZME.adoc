@@ -1,0 +1,82 @@
+= interkonekto
+:uri: https://api.linguo.io
+
+The API at {uri} returns (in the JSON format) data of words in the Ido language.
+
+
+== format
+
+Requests are constructed in the following manner:
+
+{uri}/<action>/<query>/<data>
+
+
+=== action
+
+ - krear //create
+ - lektar //read
+ - efacar //delete
+ - skribar //write / update
+
+
+=== query
+
+If the query is preceeded by a tilde, it is interpreted as a regular expression.
+
+WARNING: the `%` and `#` characters in a URI are predefined; they'll mangle your regex.
+
+
+=== data
+
+The data options are:
+
+ - semantiko
+ - morfologio
+ - exemplaro
+ - sinonimo
+ - kompundi
+
+ - any two-digit https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes[ISO language codes]
+
+Multiple selections are made by delimiting options with a vertical bar.
+The lack of specifying data returns all data for matched queries.
+
+
+== examples
+
+To return the definition of *linguo*, with example usage:
+
+.{uri}/linguo/semantiko|exemplaro
+[source,json]
+----
+{
+  "linguo": {
+    "semantiko": [
+      "Vortaro e sintaxo propra a komuneso."
+    ],
+    "exemplaro": [
+      "matrala linguo",
+      "intermixo di lingui"
+    ]
+  }
+}
+----
+
+To return the English translation of every word that begins with *vort*:
+
+.{uri}/~^vort.*/en
+[source,json]
+----
+{
+  "vortala": {
+    "en": "verbal"
+  },
+  "vortifo": {
+    "en": "word formation"
+  },
+  "vortope": {
+    "en": "literally, word for word"
+  }
+  ...
+}
+----
