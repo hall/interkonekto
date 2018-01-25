@@ -38,6 +38,11 @@ func main() {
 
 		path := strings.Split(r.URL.Path, "/") // trouble characters: %#
 
+		if path[1] == "DONAJI" {
+			output.Encode(columns)
+			return
+		}
+
 		query := path[1]
 		var data string
 		// return all data (for matching queries) if no specific set is requested

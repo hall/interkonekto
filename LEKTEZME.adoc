@@ -33,6 +33,8 @@ The data options are:
 
  - any two-digit https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes[ISO language codes]
 
+The special request {uri}/DONAJI will return a list of the data options.
+
 Multiple selections are made by delimiting options with a coma.
 The lack of specifying data returns all data for matched queries.
 
@@ -42,7 +44,7 @@ HTTP methods
 
  - POST: krear //create
 
-WARNING: the following are not yet implemented
+WARNING: the following are not yet implemented:
 
  - GET: lektar //read
  - PUT: skribar //write / update
@@ -51,6 +53,8 @@ WARNING: the following are not yet implemented
 
 == examples
 
+NOTE: the examples include extra formatting for pretty printing
+
 To return the definition of *linguo*, with example usage:
 
 .GET {uri}/linguo/semantiko,exemplaro
@@ -58,13 +62,11 @@ To return the definition of *linguo*, with example usage:
 ----
 {
   "linguo": {
-    "semantiko": [
-      "Vortaro e sintaxo propra a komuneso."
-    ],
     "exemplaro": [
-      "matrala linguo",
-      "intermixo di lingui"
+      "matrala linguo"
+      "intermixo di lingui",
     ]
+    "semantiko": "Vortaro e sintaxo propra a komuneso.",
   }
 }
 ----
