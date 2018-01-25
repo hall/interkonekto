@@ -30,10 +30,9 @@ The data options are:
  - sinonimo
  - kompundi
  - kategorio
+ - an https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes[ISO language code]
 
- - any two-digit https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes[ISO language codes]
-
-The special request {uri}/DONAJI will return a list of the data options.
+NOTE: The special request {uri}/* will return a list of the available data options.
 
 Multiple selections are made by delimiting options with a coma.
 The lack of specifying data returns all data for matched queries.

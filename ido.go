@@ -38,12 +38,17 @@ func main() {
 
 		path := strings.Split(r.URL.Path, "/") // trouble characters: %#
 
-		if path[1] == "DONAJI" {
+		switch path[1] {
+		case "":
+			output.Encode("https://github.com/linguo-io/api")
+			return
+		case "*":
 			output.Encode(columns)
 			return
 		}
 
 		query := path[1]
+
 		var data string
 		// return all data (for matching queries) if no specific set is requested
 		if len(path) < 3 {
