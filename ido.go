@@ -11,7 +11,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-var cols []string
+var allColumns []string
 
 func main() {
 	//sql.Register("sqlite3_regexp",
@@ -29,7 +29,7 @@ func main() {
 
 	rows, err := db.Query("SELECT * FROM ido WHERE io = 'linguo'")
 	panicOnErr(err)
-	cols, err = rows.Columns()
+	allColumns, err = rows.Columns()
 	panicOnErr(err)
 
 	http.HandleFunc("/favicon.ico", nil)
@@ -61,13 +61,18 @@ func main() {
 
 			columns, err := rows.Columns()
 			panicOnErr(err)
-			log.Println(columns)
+
+			colNum := len(columns)
 
 			for rows.Next() {
-				var name string
-				err = rows.Scan(&name)
-				panicOnErr(err)
-				json.NewEncoder(w).Encode(name)
+				cols := make([]interface{}, colNum)
+				for i, v := range columns {
+					cols[i] = v
+				}
+				json.NewEncoder(w).Encode(cols)
+
+				err = rows.Scan(cols...)
+				//panicOnErr(err)
 			}
 			err = rows.Err()
 			panicOnErr(err)
@@ -106,14 +111,22 @@ func main() {
 
 }
 
-// validColumn checks if a column request is valid (to prevent SQL injections).
+// validColumn checks if column requests are valid (to prevent SQL injections).
 func validColumn(a string) bool {
-	for _, b := range cols {
-		if b == a {
-			return true
+	var found bool
+	for _, c := range strings.Split(a, ",") {
+		found = false
+		for _, b := range allColumns {
+			if b == c {
+				found = true
+				continue
+			}
+		}
+		if !found {
+			return false
 		}
 	}
-	return false
+	return true
 }
 
 func panicOnErr(err error) {
