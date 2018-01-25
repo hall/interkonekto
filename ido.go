@@ -75,9 +75,9 @@ func main() {
 				panicOnErr(err)
 				for i, r := range raw {
 					if r == nil {
-						result[columns[i]] = ""
+						result[cols[i]] = ""
 					} else {
-						result[columns[i]] = string(r)
+						result[cols[i]] = string(r)
 					}
 				}
 				output.Encode(result)
