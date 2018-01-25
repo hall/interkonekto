@@ -8,15 +8,7 @@ The API at {uri} returns (in the JSON format) data of words in the Ido language.
 
 Requests are constructed in the following manner:
 
-{uri}/<action>/<query>/<data>
-
-
-=== action
-
- - krear //create
- - lektar //read
- - efacar //delete
- - skribar //write / update
+{uri}/<query>/<data>
 
 
 === query
@@ -35,18 +27,28 @@ The data options are:
  - exemplaro
  - sinonimo
  - kompundi
+ - kategorio
 
  - any two-digit https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes[ISO language codes]
 
 Multiple selections are made by delimiting options with a vertical bar.
 The lack of specifying data returns all data for matched queries.
 
+== action
+
+HTTP methods
+
+ - POST: krear //create
+ - GET: lektar //read
+ - PUT: skribar //write / update
+ - DELETE: efacar //delete
+
 
 == examples
 
 To return the definition of *linguo*, with example usage:
 
-.{uri}/linguo/semantiko|exemplaro
+.GET {uri}/linguo/semantiko|exemplaro
 [source,json]
 ----
 {
@@ -64,7 +66,7 @@ To return the definition of *linguo*, with example usage:
 
 To return the English translation of every word that begins with *vort*:
 
-.{uri}/~^vort.*/en
+.GET {uri}/~^vort.*/en
 [source,json]
 ----
 {
