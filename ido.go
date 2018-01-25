@@ -60,14 +60,13 @@ func main() {
 
 			cols, err := rows.Columns()
 			panicOnErr(err)
-			output.Encode(cols)
 
 			colNum := len(cols)
 
 			dest := make([]interface{}, colNum)
 			raw := make([][]byte, colNum)
-			result := make([]string, colNum)
-			for i, _ := range result {
+			result := make(map[string]string, colNum)
+			for i, _ := range raw {
 				dest[i] = &raw[i]
 			}
 
@@ -76,9 +75,9 @@ func main() {
 				panicOnErr(err)
 				for i, r := range raw {
 					if r == nil {
-						result[i] = "\\N"
+						result[columns[i]] = ""
 					} else {
-						result[i] = string(r)
+						result[columns[i]] = string(r)
 					}
 				}
 				output.Encode(result)
