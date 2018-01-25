@@ -11,15 +11,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-//type Vortaro struct {
-//Name         string 'json:"name"'
-//Tradukuro  []string 'json:"tradukuro"'
-//}
-
-//type Db struct {
-//db *sql.DB
-//}
-//var db *sql.DB
+var cols []string
 
 func main() {
 	//sql.Register("sqlite3_regexp",
@@ -30,63 +22,55 @@ func main() {
 	//})
 
 	db, err := sql.Open("sqlite3", "./ido.db")
-	if err != nil {
-		log.Fatal(err)
-	}
+	panicOnErr(err)
 	defer db.Close()
 	err = db.Ping()
-	if err != nil {
-		log.Fatal(err)
-	}
+	panicOnErr(err)
+
+	rows, err := db.Query("SELECT * FROM ido WHERE io = 'linguo'")
+	panicOnErr(err)
+	cols, err = rows.Columns()
+	panicOnErr(err)
 
 	http.HandleFunc("/favicon.ico", nil)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 
 		w.Header().Set("Content-Type", "application/json")
 
-		path := r.URL.Path // trouble characters: %#
-		p := strings.Split(path, "/")
+		path := strings.Split(r.URL.Path, "/") // trouble characters: %#
 
-		query := p[1]
+		query := path[1]
 		var data string
-		// return all data (for matching queries) by default
-		if len(p) < 3 || p[2] == "" {
+		// return all data (for matching queries) if no specific set is requested
+		if len(path) < 3 || path[2] == "" {
 			data = "*"
 		} else {
-			data = p[2]
+			data = path[2]
 		}
 
-		if ! validColumn(data) {
+		if !validColumn(data) {
 			w.WriteHeader(http.StatusBadRequest) //400
 			return
 		}
-		
-
-		//log.Println(query + " " + data)
-
-		//_, err := db.Begin()
-		//if err != nil {
-		//log.Fatal(err)
-		//}
 
 		switch r.Method {
 		case "GET":
 			rows, err := db.Query("SELECT "+data+" FROM ido WHERE io = ?", query)
-			if err != nil {
-				log.Fatal(err)
-			}
+			panicOnErr(err)
 			defer rows.Close()
+
+			columns, err := rows.Columns()
+			panicOnErr(err)
+			log.Println(columns)
 
 			for rows.Next() {
 				var name string
-				if err := rows.Scan(&name); err != nil {
-					log.Fatal(err)
-				}
+				err = rows.Scan(&name)
+				panicOnErr(err)
 				json.NewEncoder(w).Encode(name)
 			}
-			if err := rows.Err(); err != nil {
-				log.Fatal(err)
-			}
+			err = rows.Err()
+			panicOnErr(err)
 
 			//w.WriteHeader(http.StatusOK) //200
 			//w.WriteHeader(http.StatusNotFound) //404
@@ -124,18 +108,16 @@ func main() {
 
 // validColumn checks if a column request is valid (to prevent SQL injections).
 func validColumn(a string) bool {
-	switch a {
-	case
-		"*", // all columns
-		"af","am","an","ar","ast","ay","az","bar","be","bg","br","bs","ca","ce","ckb","cmn","co","cs","cv","cy","da","de","dv","el","en","eo","es","et","eu","fa","fi","fo","fr","fy","ga","gd","gl","gn","grc","gv","haw","he","hi","hr","ht","hu","hy","ia","id","ie","io","is","it","ja","jbo","jv","ka","ko","ku","kv","kw","la","lb","lbe","lt","lv","mdf","mg","mhr","mk","mn","ms","mt","mwl","myv","nl","nn","no","nov","nso","oc","om","pl","pms","ps","pt","qu","rm","ro","ru","rup","scn","sco","se","sh","sk","sl","so","sq","sr","sv","sw","th","tl","tok","tr","tt","udm","uk","vec","vi","vo","wa","wo","xh","yi","yo","zh","zu",
-		"semantiko",
-		"morfologio",
-		"exemplaro",
-		"sinomino",
-		"antonimo",
-		"kompundi",
-		"kategorio":
-		return true
+	for _, b := range cols {
+		if b == a {
+			return true
+		}
 	}
 	return false
+}
+
+func panicOnErr(err error) {
+	if err != nil {
+		panic(err.Error())
+	}
 }
