@@ -36,6 +36,7 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 
 		w.Header().Set("Content-Type", "application/json")
+		output := json.NewEncoder(w)
 
 		path := strings.Split(r.URL.Path, "/") // trouble characters: %#
 
@@ -64,15 +65,16 @@ func main() {
 
 			colNum := len(columns)
 
-			for rows.Next() {
-				cols := make([]interface{}, colNum)
-				for i, v := range columns {
-					cols[i] = v
-				}
-				json.NewEncoder(w).Encode(cols)
+			cols := make([]interface{}, colNum)
+			result := make([]string, colNum)
+			for i, _ := range result {
+				cols[i] = &result[i]
+			}
 
+			for rows.Next() {
 				err = rows.Scan(cols...)
-				//panicOnErr(err)
+				panicOnErr(err)
+				output.Encode(result)
 			}
 			err = rows.Err()
 			panicOnErr(err)
