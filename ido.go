@@ -11,8 +11,6 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-var allColumns []string
-
 func main() {
 	//sql.Register("sqlite3_regexp",
 	//&sqlite3.SQLiteDriver{
@@ -29,7 +27,7 @@ func main() {
 
 	rows, err := db.Query("SELECT * FROM ido WHERE io = 'linguo'")
 	panicOnErr(err)
-	allColumns, err = rows.Columns()
+	columns, err := rows.Columns()
 	panicOnErr(err)
 
 	http.HandleFunc("/favicon.ico", nil)
@@ -43,13 +41,13 @@ func main() {
 		query := path[1]
 		var data string
 		// return all data (for matching queries) if no specific set is requested
-		if len(path) < 3 || path[2] == "" {
+		if len(path) < 3 {
 			data = "*"
 		} else {
 			data = path[2]
 		}
 
-		if !validColumn(data) {
+		if !validColumn(data, columns) {
 			w.WriteHeader(http.StatusBadRequest) //400
 			return
 		}
@@ -60,20 +58,29 @@ func main() {
 			panicOnErr(err)
 			defer rows.Close()
 
-			columns, err := rows.Columns()
+			cols, err := rows.Columns()
 			panicOnErr(err)
+			output.Encode(cols)
 
-			colNum := len(columns)
+			colNum := len(cols)
 
-			cols := make([]interface{}, colNum)
+			dest := make([]interface{}, colNum)
+			raw := make([][]byte, colNum)
 			result := make([]string, colNum)
 			for i, _ := range result {
-				cols[i] = &result[i]
+				dest[i] = &raw[i]
 			}
 
 			for rows.Next() {
-				err = rows.Scan(cols...)
+				err = rows.Scan(dest...)
 				panicOnErr(err)
+				for i, r := range raw {
+					if r == nil {
+						result[i] = "\\N"
+					} else {
+						result[i] = string(r)
+					}
+				}
 				output.Encode(result)
 			}
 			err = rows.Err()
@@ -114,12 +121,12 @@ func main() {
 }
 
 // validColumn checks if column requests are valid (to prevent SQL injections).
-func validColumn(a string) bool {
+func validColumn(a string, columns []string) bool {
 	var found bool
 	for _, c := range strings.Split(a, ",") {
 		found = false
-		for _, b := range allColumns {
-			if b == c {
+		for _, b := range columns {
+			if b == c || c == "*" {
 				found = true
 				continue
 			}
