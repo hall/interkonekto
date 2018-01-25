@@ -65,7 +65,7 @@ func main() {
 
 			dest := make([]interface{}, colNum)
 			raw := make([][]byte, colNum)
-			result := make(map[string]string, colNum)
+			result := make(map[string]interface{}, colNum)
 			for i, _ := range raw {
 				dest[i] = &raw[i]
 			}
@@ -77,10 +77,16 @@ func main() {
 					if r == nil {
 						result[cols[i]] = ""
 					} else {
-						result[cols[i]] = string(r)
+						entries := strings.Split(string(r), "\n")
+						if len(entries) > 1 {
+							result[cols[i]] = strings.Split(string(r), "\n")
+						} else {
+							result[cols[i]] = string(r)
+						}
 					}
+
 				}
-				master := make(map[string]map[string]string, colNum)
+				master := make(map[string]map[string]interface{}, colNum)
 				master[query] = result
 				output.Encode(master)
 			}
