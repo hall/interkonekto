@@ -80,7 +80,9 @@ func main() {
 						result[cols[i]] = string(r)
 					}
 				}
-				output.Encode(result)
+				master := make(map[string]map[string]string, colNum)
+				master[query] = result
+				output.Encode(master)
 			}
 			err = rows.Err()
 			panicOnErr(err)

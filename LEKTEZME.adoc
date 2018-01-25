@@ -13,9 +13,11 @@ Requests are constructed in the following manner:
 
 === query
 
+WARNING: this feature is not currently available.
+
 If the query is preceeded by a tilde, it is interpreted as a regular expression.
 
-WARNING: the `%` and `#` characters in a URI are predefined; they'll mangle your regex.
+NOTE: the `%` and `#` characters in a URI are predefined; they'll mangle your regex.
 
 
 === data
@@ -31,7 +33,7 @@ The data options are:
 
  - any two-digit https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes[ISO language codes]
 
-Multiple selections are made by delimiting options with a vertical bar.
+Multiple selections are made by delimiting options with a coma.
 The lack of specifying data returns all data for matched queries.
 
 == action
@@ -39,6 +41,9 @@ The lack of specifying data returns all data for matched queries.
 HTTP methods
 
  - POST: krear //create
+
+WARNING: the following are not yet implemented
+
  - GET: lektar //read
  - PUT: skribar //write / update
  - DELETE: efacar //delete
@@ -48,7 +53,7 @@ HTTP methods
 
 To return the definition of *linguo*, with example usage:
 
-.GET {uri}/linguo/semantiko|exemplaro
+.GET {uri}/linguo/semantiko,exemplaro
 [source,json]
 ----
 {
