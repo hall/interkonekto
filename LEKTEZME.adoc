@@ -8,7 +8,7 @@ The API at {uri} returns (in the JSON format) data of words in the Ido language.
 
 Requests are constructed in the following manner:
 
-{uri}/<query>/<data>
+{uri}/__query__/__data__
 
 
 === query
@@ -52,7 +52,7 @@ WARNING: the following are not yet implemented:
 
 == examples
 
-NOTE: the examples include extra formatting for pretty printing
+NOTE: these examples include extra formatting for legability
 
 To return the definition of *linguo*, with example usage:
 
@@ -64,8 +64,8 @@ To return the definition of *linguo*, with example usage:
     "exemplaro": [
       "matrala linguo"
       "intermixo di lingui",
-    ]
-    "semantiko": "Vortaro e sintaxo propra a komuneso.",
+    ],
+    "semantiko": "Vortaro e sintaxo propra a komuneso."
   }
 }
 ----
