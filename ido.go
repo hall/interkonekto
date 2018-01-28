@@ -34,6 +34,7 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 
 		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
 		output := json.NewEncoder(w)
 
 		path := strings.Split(r.URL.Path, "/") // trouble characters: %#

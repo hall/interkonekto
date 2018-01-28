@@ -41,11 +41,11 @@ The lack of specifying data returns all data for matched queries.
 
 HTTP methods
 
- - POST: krear //create
+ - GET: lektar //read
 
 WARNING: the following are not yet implemented:
 
- - GET: lektar //read
+ - POST: krear //create
  - PUT: skribar //write / update
  - DELETE: efacar //delete
 
