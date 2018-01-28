@@ -3,7 +3,9 @@
 
 The API at {uri} returns (in the https://json.org[JSON] format) data of words in the Ido language.
 
-WARNING: This project is very unstable and will change frequently until it has time to mature.
+WARNING: This project is very unstable and will change frequently until it has time to mature. If you experience issues, please notify the maintainer at api@posto.linguo.io.
+
+A simple front end is being co-developed here: https://github.com/linguo-io/vortaro
 
 
 == format
@@ -15,11 +17,11 @@ Requests are constructed in the following manner:
 
 === query
 
-Preceeding the query with an ISO language code, followed by a colon, will treat the query as being written in that language.
+Preceding the query with an ISO language code, followed by a colon, will treat the query as being written in that language.
 
 WARNING: The following feature is not currently available:
 
-If the query is preceeded by a tilde, it is interpreted as a regular expression.
+If the query is preceded by a tilde, it is interpreted as a regular expression.
 
 
 === data
@@ -29,7 +31,7 @@ The data options are:
 [horizontal]
  semantiko:: definitions
  exemplaro:: a few examples of usage
- sinonimo:: words with similiar meanings
+ sinonimo:: words with similar meanings
  kompundi:: compound forms
  kategorio:: associated categories
  an https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes[ISO language code]:: en,es,zh,...
@@ -55,7 +57,7 @@ WARNING: The following are not yet implemented:
 
 == examples
 
-NOTE: These examples include extra formatting for legability.
+NOTE: These examples include extra formatting for legibility.
 
 To return the definition of *linguo*, with example usage:
 
@@ -123,7 +125,7 @@ intermixo di lingui
 |===
 
 Note that the `io` column encodes the morphology of a word by delimiting its segments with the full stop character (or, "period": `.`);
-multiple definitions, examples, synonyms, etc., should be seperated by a newline.
+multiple definitions, examples, synonyms, etc., should be separated by a newline.
 
 == contributing
 
@@ -133,7 +135,7 @@ We're social animals, we promise.
 == pri
 
 The initial data set has been scraped from an https://io.wiktionary.org[Ido Wiktionary] https://dumps.wikimedia.org/iowiktionary/20180120[data dump].
-However, due to Wikimedia's format prioritizing human legability over machine parsability, much of the data was either completely dropped or just plain corrupted by the parsing process;
+However, due to Wikimedia's format prioritizing human legibility over machine parsability, much of the data was either completely dropped or just plain corrupted by the parsing process;
 it is for this reason that we believe Wiktionary to be a poor choice for data storage and retrieval.
 
 Ido will never grow as a language if we cannot write decent programs for it.
