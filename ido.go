@@ -104,7 +104,7 @@ func main() {
 
 				}
 				master := make(map[string]map[string]interface{}, colNum)
-				master[query] = result
+				master[splitQuery[1]] = result
 				output.Encode(master)
 			}
 			err = rows.Err()
