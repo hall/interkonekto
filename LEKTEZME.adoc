@@ -113,15 +113,17 @@ To return the English translation of every word that begins with *vort*:
 The `ido` table in the SQLite database, `ido.db`, has the following general format:
 
 .Column names correspond to <<data>> options and each row represents a word.
+[cols="10,10,50,30"]
 |===
 | en          | io         | semantiko                            | exemplaro
-| language    | lingu.o    | Vortaro e sintaxo propra a komuneso. | matrala linguo\nintermixo di lingui
-| morphology  | morfologi.o| (biol., filoz.) Cienco di la diversa formi di materio.\n(gram.) Cienco di la diversa formi gramatikala di la vorti. |
+| language    | lingu.o    | Vortaro e sintaxo propra a komuneso. | matrala linguo +
+intermixo di lingui
+| morphology  | morfologi.o| (biol., filoz.) Cienco di la diversa formi di materio. +
+(gram.) Cienco di la diversa formi gramatikala di la vorti. |
 |===
 
-where `\n` is the character for a newline (that is, multiple definitions and examples should be seperated by a newline character).
-Note that the `io` column encodes the morphology of a word by delimiting its segments with the full stop character (or, "period": `.`).
-
+Note that the `io` column encodes the morphology of a word by delimiting its segments with the full stop character (or, "period": `.`);
+multiple definitions, examples, synonyms, etc., should be seperated by a newline.
 
 == contributing
 
