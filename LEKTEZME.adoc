@@ -113,7 +113,7 @@ To return the English translation of every word that begins with *vort*:
 The `ido` table in the SQLite database, `ido.db`, has the following general format:
 
 .Column names correspond to <<data>> options and each row represents a word.
-[cols="10,10,50,30"]
+[cols="10,10,50,30",options="header"]
 |===
 | en          | io         | semantiko                            | exemplaro
 | language    | lingu.o    | Vortaro e sintaxo propra a komuneso. | matrala linguo +
