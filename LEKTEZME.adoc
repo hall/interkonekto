@@ -3,6 +3,8 @@
 
 The API at {uri} returns (in the JSON format) data of words in the Ido language.
 
+WARNING: This project is very unstable and will change frequently until it has time to mature.
+
 
 == format
 
@@ -13,48 +15,48 @@ Requests are constructed in the following manner:
 
 === query
 
-Preceeding the query with an ISO language code, followed by a colon, will treat the query and being written in that language.
+Preceeding the query with an ISO language code, followed by a colon, will treat the query as being written in that language.
 
-WARNING: this feature is not currently available.
+WARNING: The following feature is not currently available:
 
 If the query is preceeded by a tilde, it is interpreted as a regular expression.
-
-NOTE: the `%` and `#` characters in a URI are predefined; they'll mangle your regex.
 
 
 === data
 
 The data options are:
 
- - semantiko
- - morfologio
- - exemplaro
- - sinonimo
- - kompundi
- - kategorio
- - an https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes[ISO language code]
+[horizontal]
+ semantiko:: definitions
+ morfologio:: how the words are constructed
+ exemplaro:: a few examples of usage
+ sinonimo:: words with similiar meanings
+ kompundi:: compound forms
+ kategorio:: associated categories
+ an https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes[ISO language code]:: en,es,zh,...
+
 
 NOTE: The special request {uri}/* will return a list of the available data options.
 
 Multiple selections are made by delimiting options with a coma.
-The lack of specifying data returns all data for matched queries.
+If no data options are requested, all of them are returned (for matched queries).
 
 == action
 
-HTTP methods
+The usual HTTP methods will not surprise you.
 
- - GET: lektar //read
+ - GET: lektar
 
-WARNING: the following are not yet implemented:
+WARNING: The following are not yet implemented:
 
- - POST: krear //create
- - PUT: skribar //write / update
- - DELETE: efacar //delete
+ - POST: krear
+ - PUT: skribar
+ - DELETE: efacar
 
 
 == examples
 
-NOTE: these examples include extra formatting for legability
+NOTE: These examples include extra formatting for legability.
 
 To return the definition of *linguo*, with example usage:
 
@@ -62,7 +64,7 @@ To return the definition of *linguo*, with example usage:
 [source,json]
 ----
 {
-  "linguo": {
+  "lingu.o": {
     "exemplaro": [
       "matrala linguo"
       "intermixo di lingui",
@@ -78,7 +80,7 @@ To return matches of the Russian word *язык*:
 [source,json]
 ----
 {
-  "язык": {
+  "lingu.o": {
     ...
     "io": "linguo",
     ...
@@ -106,4 +108,33 @@ To return the English translation of every word that begins with *vort*:
   ...
 }
 ----
+
+== database
+
+The `ido` table in the SQLite database, `ido.db`, has the following general format:
+
+.Column names correspond to <<data>> options and each row represents a word.
+|===
+| en          | io         | semantiko                            | exemplaro
+| language    | lingu.o    | Vortaro e sintaxo propra a komuneso. | matrala linguo\nintermixo di lingui
+| morphology  | morfologi.o| (biol., filoz.) Cienco di la diversa formi di materio.\n(gram.) Cienco di la diversa formi gramatikala di la vorti. |
+|===
+
+where `\n` is the character for a newline (that is, multiple definitions and examples should be seperated by a newline character).
+Note that the `io` column encodes (or, _will_ encode when that change is made) the morphology of a word by delimiting its segments with the full stop character (or, "period": `.`).
+
+
+== contributing
+
+If you have any thoughts on the project or want to get involved in any way, reach out to us!
+We're social animals, we promise.
+
+== pri
+
+The initial data set has been scraped from an https://io.wiktionary.org[Ido Wiktionary] data dump.
+However, due to Wikimedia's format prioritizing human legability over machine parsability, much of the data was either completely dropped or just plain corrupted by the parsing process;
+it is for this reason that we believe Wiktionary to be a poor choice for data storage and retrieval.
+
+Ido will never grow as a language if we cannot write decent programs for it.
+That is what this repo is all about: a unified resource for universal access.
 
