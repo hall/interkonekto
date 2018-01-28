@@ -71,6 +71,12 @@ func main() {
 				splitQuery = append(splitQuery, query)
 			}
 
+			if !validColumn(splitQuery[0], columns) {
+				w.WriteHeader(http.StatusBadRequest) //400
+				return
+			}
+
+
 			rows, err := db.Query("SELECT "+data+" FROM ido WHERE replace("+splitQuery[0]+",'.','') = ?", splitQuery[1])
 			panicOnErr(err)
 			defer rows.Close()

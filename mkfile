@@ -1,4 +1,4 @@
-install:
+install:V:
  rsync --delete -lr . linguo.io:/srv/ido/api --exclude .git
 
 backup:V:
@@ -6,3 +6,4 @@ backup:V:
 
 restore:V:
  rm ido.db; cat ido.sql | sqlite3 ido.db
+
