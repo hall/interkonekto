@@ -132,7 +132,7 @@ We're social animals, we promise.
 
 == pri
 
-The initial data set has been scraped from an https://io.wiktionary.org[Ido Wiktionary] data dump.
+The initial data set has been scraped from an https://io.wiktionary.org[Ido Wiktionary] https://dumps.wikimedia.org/iowiktionary/20180120[data dump].
 However, due to Wikimedia's format prioritizing human legability over machine parsability, much of the data was either completely dropped or just plain corrupted by the parsing process;
 it is for this reason that we believe Wiktionary to be a poor choice for data storage and retrieval.
 
