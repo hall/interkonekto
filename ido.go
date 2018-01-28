@@ -71,7 +71,7 @@ func main() {
 				splitQuery = append(splitQuery, query)
 			}
 
-			rows, err := db.Query("SELECT "+data+" FROM ido WHERE "+splitQuery[0]+" = ?", splitQuery[1])
+			rows, err := db.Query("SELECT "+data+" FROM ido WHERE replace("+splitQuery[0]+",'.','') = ?", splitQuery[1])
 			panicOnErr(err)
 			defer rows.Close()
 

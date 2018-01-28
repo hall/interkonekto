@@ -1,7 +1,7 @@
 = interkonekto
 :uri: https://api.linguo.io
 
-The API at {uri} returns (in the JSON format) data of words in the Ido language.
+The API at {uri} returns (in the https://json.org[JSON] format) data of words in the Ido language.
 
 WARNING: This project is very unstable and will change frequently until it has time to mature.
 
@@ -28,7 +28,6 @@ The data options are:
 
 [horizontal]
  semantiko:: definitions
- morfologio:: how the words are constructed
  exemplaro:: a few examples of usage
  sinonimo:: words with similiar meanings
  kompundi:: compound forms
@@ -121,7 +120,7 @@ The `ido` table in the SQLite database, `ido.db`, has the following general form
 |===
 
 where `\n` is the character for a newline (that is, multiple definitions and examples should be seperated by a newline character).
-Note that the `io` column encodes (or, _will_ encode when that change is made) the morphology of a word by delimiting its segments with the full stop character (or, "period": `.`).
+Note that the `io` column encodes the morphology of a word by delimiting its segments with the full stop character (or, "period": `.`).
 
 
 == contributing
