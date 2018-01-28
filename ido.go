@@ -65,7 +65,13 @@ func main() {
 
 		switch r.Method {
 		case "GET":
-			rows, err := db.Query("SELECT "+data+" FROM ido WHERE io = ?", query)
+			splitQuery := strings.Split(query, ":")
+			if (len(splitQuery) == 1) {
+				splitQuery[0] = "io"
+				splitQuery = append(splitQuery, query)
+			}
+
+			rows, err := db.Query("SELECT "+data+" FROM ido WHERE "+splitQuery[0]+" = ?", splitQuery[1])
 			panicOnErr(err)
 			defer rows.Close()
 

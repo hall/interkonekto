@@ -13,6 +13,8 @@ Requests are constructed in the following manner:
 
 === query
 
+Preceeding the query with an ISO language code, followed by a colon, will treat the query and being written in that language.
+
 WARNING: this feature is not currently available.
 
 If the query is preceeded by a tilde, it is interpreted as a regular expression.
@@ -70,6 +72,22 @@ To return the definition of *linguo*, with example usage:
 }
 ----
 
+To return matches of the Russian word *язык*:
+
+.GET {uri}/ru:язык
+[source,json]
+----
+{
+  "язык": {
+    ...
+    "io": "linguo",
+    ...
+    "ru": "язык",
+    ...
+  }
+}
+----
+
 To return the English translation of every word that begins with *vort*:
 
 .GET {uri}/~^vort.*/en
@@ -88,3 +106,4 @@ To return the English translation of every word that begins with *vort*:
   ...
 }
 ----
+
