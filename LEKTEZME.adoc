@@ -50,8 +50,19 @@ The usual HTTP methods will not surprise you.
 
 WARNING: The following are not yet implemented:
 
+ - PUT: skribar nova informeso
+
+.PUT {uri}/linguo/semantiko nova='something or another about language.'
+[source,json]
+----
+{
+  "lingu.o": {
+    "semantiko": "something or another about language."
+  }
+}
+----
+
  - POST: krear
- - PUT: skribar
  - DELETE: efacar
 
 

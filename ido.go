@@ -4,11 +4,10 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"net/http"
 	"strings"
-
-	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
@@ -27,7 +26,7 @@ func main() {
 
 	rows, err := db.Query("SELECT * FROM ido WHERE io = 'linguo'")
 	panicOnErr(err)
-	columns, err := rows.Columns()
+	datumi, err := rows.Columns()
 	panicOnErr(err)
 
 	http.HandleFunc("/favicon.ico", nil)
@@ -35,49 +34,56 @@ func main() {
 
 		w.Header().Set("Content-Type", "application/json")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
-		output := json.NewEncoder(w)
+		w.Header().Set("Access-Control-Allow-Methods", "GET, PUT, OPTIONS")
+		w.Header().Set("Access-Control-Max-Age", "86400")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+		rendimento := json.NewEncoder(w)
 
 		path := strings.Split(r.URL.Path, "/") // trouble characters: %#
 
 		switch path[1] {
 		case "":
-			output.Encode("https://github.com/linguo-io/api")
+			rendimento.Encode("https://github.com/linguo-io/api")
 			return
 		case "*":
-			output.Encode(columns)
+			rendimento.Encode(datumi)
 			return
 		}
 
-		query := path[1]
+		demando := path[1]
 
-		var data string
-		// return all data (for matching queries) if no specific set is requested
-		if len(path) < 3 {
-			data = "*"
+		var datumo string
+		var linguo string
+
+		splitQuery := strings.Split(demando, ":")
+		// search with Ido by default
+		if len(splitQuery) == 1 {
+			linguo = "io"
 		} else {
-			data = path[2]
+			linguo = splitQuery[0]
 		}
 
-		if !validColumn(data, columns) {
+		if !validColumn(linguo, datumi) {
+			w.WriteHeader(http.StatusBadRequest) //400
+			return
+		}
+
+		// return all data (for matching queries) if no specific set is requested
+		if len(path) < 3 || path[2] == "" {
+			datumo = "*"
+		} else {
+			datumo = path[2]
+		}
+
+		if !validColumn(datumo, datumi) {
 			w.WriteHeader(http.StatusBadRequest) //400
 			return
 		}
 
 		switch r.Method {
 		case "GET":
-			splitQuery := strings.Split(query, ":")
-			if (len(splitQuery) == 1) {
-				splitQuery[0] = "io"
-				splitQuery = append(splitQuery, query)
-			}
-
-			if !validColumn(splitQuery[0], columns) {
-				w.WriteHeader(http.StatusBadRequest) //400
-				return
-			}
-
-
-			rows, err := db.Query("SELECT "+data+" FROM ido WHERE replace("+splitQuery[0]+",'.','') = ?", splitQuery[1])
+			rows, err := db.Query("SELECT "+datumo+" FROM ido WHERE replace("+linguo+",'.','') = ?", demando)
 			panicOnErr(err)
 			defer rows.Close()
 
@@ -110,8 +116,8 @@ func main() {
 
 				}
 				master := make(map[string]map[string]interface{}, colNum)
-				master[splitQuery[1]] = result
-				output.Encode(master)
+				master[demando] = result
+				rendimento.Encode(master)
 			}
 			err = rows.Err()
 			panicOnErr(err)
@@ -120,15 +126,24 @@ func main() {
 			//w.WriteHeader(http.StatusNotFound) //404
 			//w.WriteHeader(http.StatusBadRequest) //400
 
-		case "PUT": //write / update
-		//statement, _ := db.Prepare("UPDATE ido SET en='?' WHERE io='?'")
-		//statement.Exec("en", query)
+		case "PUT":
+			if datumo == "*" {
+				return
+			}
+			err := r.ParseForm()
+			panicOnErr(err)
+			nova := r.PostFormValue("nova")
+			//if (len(nova) < 1) { return }
 
-		case "POST": //create
-		//statement, err := db.Prepare("INSERT INTO ido (io) VALUES (?)")
-		//if err != nil {
-		//log.Fatal(err)
-		//}
+			//statement, err := db.Prepare("UPDATE ido SET "+data+" = ?")
+			//if err != nil {
+			//log.Fatal(err)
+			//}
+			//statement.Exec(nova)
+			rendimento.Encode("UPDATE ido SET '" + datumo + "' = '" + nova + "' WHERE io = " + demando + ";")
+
+		case "POST":
+		//statement, _ := db.Prepare("UPDATE ido SET en='?' WHERE io='?'")
 		//statement.Exec("en", query)
 
 		case "DELETE": //delete
@@ -151,11 +166,11 @@ func main() {
 }
 
 // validColumn checks if column requests are valid (to prevent SQL injections).
-func validColumn(a string, columns []string) bool {
+func validColumn(datumo string, datumi []string) bool {
 	var found bool
-	for _, c := range strings.Split(a, ",") {
+	for _, c := range strings.Split(datumo, ",") {
 		found = false
-		for _, b := range columns {
+		for _, b := range datumi {
 			if b == c || c == "*" {
 				found = true
 				continue
