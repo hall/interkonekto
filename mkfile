@@ -1,5 +1,5 @@
 install:V:
- rsync --delete -lr . linguo.io:/srv/ido/api --exclude .git
+ rsync --delete -lr . linguo.io:/srv/ido/api --exclude .git --exclude cert.pem --exclude key.pem
 
 backup:V:
  sqlite3 ido.db '.dump' > ido.sql

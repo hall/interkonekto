@@ -158,7 +158,7 @@ func main() {
 		}
 
 	})
-	err = http.ListenAndServeTLS(":4443", "/etc/ssl/linguo.io/cert.pem", "/etc/ssl/linguo.io/key.pem", nil)
+	err = http.ListenAndServeTLS(":4443", "cert.pem", "key.pem", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
