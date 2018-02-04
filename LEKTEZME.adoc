@@ -3,7 +3,7 @@
 
 The API at {uri} returns (in the https://json.org[JSON] format) data of words in the Ido language.
 
-WARNING: This project is very unstable and will change frequently until it has time to mature. If you experience issues, please notify the maintainer at api@posto.linguo.io.
+WARNING: This project is very unstable and will change frequently until it has time to mature. If you experience issues, please notify the administrator at api@posto.linguo.io.
 
 A simple front end is being co-developed here: https://github.com/linguo-io/vortaro
 

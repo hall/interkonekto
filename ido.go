@@ -24,7 +24,7 @@ func main() {
 	err = db.Ping()
 	panicOnErr(err)
 
-	rows, err := db.Query("SELECT * FROM ido WHERE io = 'linguo'")
+	rows, err := db.Query("SELECT * FROM ido WHERE io = 'lingu.o'")
 	panicOnErr(err)
 	datumi, err := rows.Columns()
 	panicOnErr(err)
@@ -158,7 +158,7 @@ func main() {
 		}
 
 	})
-	err = http.ListenAndServeTLS(":4443", "/etc/letsencrypt/live/linguo.io/fullchain.pem", "/etc/letsencrypt/live/linguo.io/privkey.pem", nil)
+	err = http.ListenAndServeTLS(":4443", "/etc/ssl/linguo.io/cert.pem", "/etc/ssl/linguo.io/key.pem", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
