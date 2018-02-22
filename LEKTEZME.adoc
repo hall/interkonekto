@@ -52,7 +52,7 @@ WARNING: The following are not yet implemented:
 
  - PUT: skribar nova informeso
 
-.PUT {uri}/linguo/semantiko nova='something or another about language.'
+.PUT {uri}/linguo semantiko='something or another about language.'
 [source,json]
 ----
 {
@@ -68,9 +68,7 @@ WARNING: The following are not yet implemented:
 
 == examples
 
-NOTE: These examples include extra formatting for legibility.
-
-To return the definition of *linguo*, with example usage:
+To return the definition of _linguo_, with example usage:
 
 .GET {uri}/linguo/semantiko,exemplaro
 [source,json]
@@ -86,7 +84,7 @@ To return the definition of *linguo*, with example usage:
 }
 ----
 
-To return matches of the Russian word *язык*:
+To return matches of the Russian word _язык_:
 
 .GET {uri}/ru:язык
 [source,json]

@@ -57,11 +57,11 @@ func main() {
 		var linguo string
 
 		splitQuery := strings.Split(demando, ":")
-		// search with Ido by default
 		if len(splitQuery) == 1 {
-			linguo = "io"
+			linguo = "io" // search with Ido by default
 		} else {
 			linguo = splitQuery[0]
+			demando = splitQuery[1]
 		}
 
 		if !validColumn(linguo, datumi) {
@@ -132,7 +132,7 @@ func main() {
 			}
 			err := r.ParseForm()
 			panicOnErr(err)
-			nova := r.PostFormValue("nova")
+			//nova := r.PostFormValue("nova")
 			//if (len(nova) < 1) { return }
 
 			//statement, err := db.Prepare("UPDATE ido SET "+data+" = ?")
@@ -140,7 +140,7 @@ func main() {
 			//log.Fatal(err)
 			//}
 			//statement.Exec(nova)
-			rendimento.Encode("UPDATE ido SET '" + datumo + "' = '" + nova + "' WHERE io = " + demando + ";")
+		//	rendimento.Encode("UPDATE ido SET '" + datumo + "' = '" + nova + "' WHERE io = " + demando + ";")
 
 		case "POST":
 		//statement, _ := db.Prepare("UPDATE ido SET en='?' WHERE io='?'")
