@@ -12,9 +12,11 @@ build:
   script:
     - go get ...
     - go build
+  after_script:
+    - mv $PACKAGE_PATH/$NAME $CI_PROJECT_DIR/
   artifacts:
     paths:
-      - $PACKAGE_PATH/$NAME
+      - $NAME
 
 deploy:
   stage: deploy
