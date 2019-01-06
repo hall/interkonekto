@@ -5,6 +5,7 @@ before_script:
   - curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
   - apt-get update
   - apt-get -qq -y install google-cloud-sdk-app-engine-go
+  - go get ...
 
 after_script:
   - rm /tmp/$CI_PIPELINE_ID.json
