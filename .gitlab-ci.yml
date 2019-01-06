@@ -1,9 +1,16 @@
+variables:
+  PACKAGE_PATH: /go/src/gitlab.com/hall/interkonekto
+
 build:
   stage: build
   image: golang:1.11
+  before_script:
+    - mkdir -p $(dirname $PACKAGE_PATH)
+    - cp -r $CI_PROJECT_DIR $PACKAGE_PATH
+    - cd $PACKAGE_PATH
   script:
-  - go get ...
-  - go build
+    - go get ...
+    - go build
   artifacts:
     paths:
       - $CI_PROJECT_NAME
@@ -20,4 +27,4 @@ deploy:
     - gcloud auth activate-service-account --key-file /tmp/$CI_PIPELINE_ID.json
     - rm /tmp/$CI_PIPELINE_ID.json
   script:
-    - gcloud --quiet --project $PROJECT_ID_PRODUCTION app deploy
+    - gcloud --quiet --project $CI_PROJECT_NAME app deploy
