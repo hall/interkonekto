@@ -1,21 +1,23 @@
-image: python
-
-before_script:
-  - echo "deb http://packages.cloud.google.com/apt cloud-sdk-jessie main" | tee /etc/apt/sources.list.d/google-cloud-sdk.list
-  - curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
-  - apt-get update
-  - apt-get -qq -y install google-cloud-sdk-app-engine-go
+build:
+  stage: build
+  image: golang:1.11
+  script:
   - go get ...
-
-after_script:
-  - rm /tmp/$CI_PIPELINE_ID.json
+  - go build
+  artifacts:
+    paths:
+      - $CI_PROJECT_NAME
 
 deploy:
+  stage: deploy
+  image: google/cloud-sdk
   stage: deploy
   environment: production
   only:
     - master
-  script:
+  before_script:
     - echo $DEPLOY_KEY_FILE_PRODUCTION > /tmp/$CI_PIPELINE_ID.json
     - gcloud auth activate-service-account --key-file /tmp/$CI_PIPELINE_ID.json
+    - rm /tmp/$CI_PIPELINE_ID.json
+  script:
     - gcloud --quiet --project $PROJECT_ID_PRODUCTION app deploy
