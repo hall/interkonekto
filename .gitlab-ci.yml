@@ -1,5 +1,6 @@
 variables:
-  PACKAGE_PATH: /go/src/gitlab.com/hall/interkonekto
+  NAME: interkonekto
+  PACKAGE_PATH: /go/src/gitlab.com/hall/$NAME
 
 build:
   stage: build
@@ -13,7 +14,7 @@ build:
     - go build
   artifacts:
     paths:
-      - $PACKAGE_PATH/$CI_PROJECT_NAME
+      - $PACKAGE_PATH/$NAME
 
 deploy:
   stage: deploy
