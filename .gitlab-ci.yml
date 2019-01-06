@@ -4,7 +4,7 @@ before_script:
   - echo "deb http://packages.cloud.google.com/apt cloud-sdk-jessie main" | tee /etc/apt/sources.list.d/google-cloud-sdk.list
   - curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
   - apt-get update
-  - apt-get -qq -y install google-cloud-sdk
+  - apt-get -qq -y install google-cloud-sdk-app-engine-go
 
 after_script:
   - rm /tmp/$CI_PIPELINE_ID.json
