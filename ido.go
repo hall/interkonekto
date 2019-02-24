@@ -1,9 +1,10 @@
-/*interkonekto serves a RESTful API to define and translate words in the Ido language. */
+/*interkonekto serves a RESTful API to define and translate words in the ido language. */
 package main
 
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -20,19 +21,26 @@ func main() {
 	db = DB()
 	defer db.Close()
 
-	//	http.HandleFunc("/favicon.ico", nil)
+	//http.HandleFunc("/favicon.ico", nil)
 	http.HandleFunc("/", indexHandler)
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+		log.Printf("Defaulting to port %s", port)
+	}
+
+	log.Printf("Listening on port %s", port)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), nil))
 }
 
 func DB() *sql.DB {
 
-	connStr := "user=postgres password=" + os.Getenv("DB_PASSWORD") + " host=35.226.129.4 dbname=postgres"
-	db, err := sql.Open("postgres", connStr)
+	dbURI := fmt.Sprintf("user=postgres password=%s host=/cloudsql/bryton:us-central1:vortaro dbname=postgres", os.Getenv("DB_PASSWORD"))
+	db, err := sql.Open("postgres", dbURI)
 	panicOnErr(err)
 
-	rows, err := db.Query("SELECT * FROM ido WHERE io = 'lingu.o'")
+	rows, err := db.Query("SELECT * FROM vortaro WHERE io = 'lingu.o'")
 	panicOnErr(err)
 	datumi, err = rows.Columns()
 	panicOnErr(err)
@@ -69,7 +77,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 
 	splitQuery := strings.Split(demando, ":")
 	if len(splitQuery) == 1 {
-		linguo = "io" // search with Ido by default
+		linguo = "io" // search with ido by default
 	} else {
 		linguo = splitQuery[0]
 		demando = splitQuery[1]
@@ -94,7 +102,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 	case "GET":
-		rows, err := db.Query("SELECT "+datumo+" FROM ido WHERE replace("+linguo+",'.','') = ?", demando)
+		rows, err := db.Query("SELECT "+datumo+" FROM vortaro WHERE REPLACE("+linguo+",'.','') = $1", demando)
 		panicOnErr(err)
 		defer rows.Close()
 
@@ -146,19 +154,19 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		//nova := r.PostFormValue("nova")
 		//if (len(nova) < 1) { return }
 
-		//statement, err := db.Prepare("UPDATE ido SET "+data+" = ?")
+		//statement, err := db.Prepare("UPDATE vortaro SET "+data+" = ?")
 		//if err != nil {
 		//log.Fatal(err)
 		//}
 		//statement.Exec(nova)
-	//	rendimento.Encode("UPDATE ido SET '" + datumo + "' = '" + nova + "' WHERE io = " + demando + ";")
+	//	rendimento.Encode("UPDATE vortaro SET '" + datumo + "' = '" + nova + "' WHERE io = " + demando + ";")
 
 	case "POST":
-	//statement, _ := db.Prepare("UPDATE ido SET en='?' WHERE io='?'")
+	//statement, _ := db.Prepare("UPDATE vortaro SET en='?' WHERE io='?'")
 	//statement.Exec("en", query)
 
 	case "DELETE": //delete
-		//statement, _ := db.Prepare("DELETE FROM ido WHERE io='?'")
+		//statement, _ := db.Prepare("DELETE FROM vortaro WHERE io='?'")
 		//statement.Exec("en", query)
 
 		//default:

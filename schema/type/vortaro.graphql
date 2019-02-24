@@ -1,0 +1,12 @@
+type Vortaro {
+  io: String!
+
+  Semantiko: [String]
+  Morfologio: [String]
+  Exemplaro: [String]
+  Sinonimo: [String]
+  Antonimo: [String]
+  Kompundi: [String]
+
+  en: String
+}

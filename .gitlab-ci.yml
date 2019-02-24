@@ -30,4 +30,4 @@ deploy:
     - gcloud auth activate-service-account --key-file /tmp/$CI_PIPELINE_ID.json
     - rm /tmp/$CI_PIPELINE_ID.json
   script:
-    - gcloud --quiet --project $CI_PROJECT_NAME app deploy
+    - gcloud --quiet app deploy
